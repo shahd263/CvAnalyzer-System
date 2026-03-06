@@ -4,6 +4,7 @@ using CvAnalyzer.Persistence.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CvAnalyzer.Persistence.Data.Migrations
 {
     [DbContext(typeof(AnalyzerDbcontext))]
-    partial class AnalyzerDbcontextModelSnapshot : ModelSnapshot
+    [Migration("20260306052148_ResumeModuleInitialCreate")]
+    partial class ResumeModuleInitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
