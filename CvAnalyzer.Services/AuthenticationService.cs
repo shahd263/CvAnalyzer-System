@@ -76,6 +76,7 @@ namespace CvAnalyzer.Services
             //Token : [Issuer ,Audience ,Claims , Expires , SigningCredintials]
             var Claims = new List<Claim>()
             {
+                new Claim(ClaimTypes.NameIdentifier , user.Id),
                 new Claim(JwtRegisteredClaimNames.Email , user.Email!),
                 new Claim(JwtRegisteredClaimNames.Name , user.UserName!)
             };

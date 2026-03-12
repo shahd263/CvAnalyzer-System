@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,9 +47,10 @@ namespace CvAnalyzer.Presentation.Controllers
 
         [Authorize]
         [HttpGet("CurrentUser")]
-        public async Task<ActionResult<UserDTO>> CurrentUser(string Email)
+        public async Task<ActionResult<UserDTO>> CurrentUser()
         {
-            var Result = await _authenticationService.GetUserByEmail(Email);
+            var Email = User.FindFirstValue(ClaimTypes.Email);
+            var Result = await _authenticationService.GetUserByEmail(Email!);
             return Ok(Result);
         }
     }

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\CvAnalyzer.Services\CvAnalyzer.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Configurations\" />
+  </ItemGroup>
+
 </Project>

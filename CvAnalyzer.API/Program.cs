@@ -1,6 +1,8 @@
 
+using CvAnalyzer.Domian.Contracts;
 using CvAnalyzer.Domian.Entities.IdentityModule;
 using CvAnalyzer.Persistence.Data.DbContexts;
+using CvAnalyzer.Persistence.Repositories;
 using CvAnalyzer.Services;
 using CvAnalyzer.Services_Abstraction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,10 +30,12 @@ namespace CvAnalyzer.API
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AnalyzerDbcontext>();
+                .AddEntityFrameworkStores<IdentityDbContext>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             builder.Services.AddAuthentication(options =>
@@ -51,6 +55,8 @@ namespace CvAnalyzer.API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTOptions:SecretKey"]!))
                 };
             });
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

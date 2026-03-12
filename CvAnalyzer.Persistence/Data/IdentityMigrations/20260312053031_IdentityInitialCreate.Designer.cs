@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CvAnalyzer.Persistence.Data.Migrations
+namespace CvAnalyzer.Persistence.Data.IdentityMigrations
 {
-    [DbContext(typeof(AnalyzerDbcontext))]
-    [Migration("20260302050736_IdentityTablesInitialCreate")]
-    partial class IdentityTablesInitialCreate
+    [DbContext(typeof(IdentityDbContext))]
+    [Migration("20260312053031_IdentityInitialCreate")]
+    partial class IdentityInitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,6 +92,35 @@ namespace CvAnalyzer.Persistence.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("CvAnalyzer.Domian.Entities.ResumeModule.Resume", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CvText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PdfUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Resume");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -227,6 +256,13 @@ namespace CvAnalyzer.Persistence.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CvAnalyzer.Domian.Entities.ResumeModule.Resume", b =>
+                {
+                    b.HasOne("CvAnalyzer.Domian.Entities.IdentityModule.ApplicationUser", null)
+                        .WithMany("Resumes")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -276,6 +312,11 @@ namespace CvAnalyzer.Persistence.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CvAnalyzer.Domian.Entities.IdentityModule.ApplicationUser", b =>
+                {
+                    b.Navigation("Resumes");
                 });
 #pragma warning restore 612, 618
         }

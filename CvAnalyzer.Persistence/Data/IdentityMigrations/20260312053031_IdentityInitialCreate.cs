@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CvAnalyzer.Persistence.Data.Migrations
+namespace CvAnalyzer.Persistence.Data.IdentityMigrations
 {
     /// <inheritdoc />
-    public partial class IdentityTablesInitialCreate : Migration
+    public partial class IdentityInitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -134,6 +134,27 @@ namespace CvAnalyzer.Persistence.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Resume",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PdfUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CvText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resume", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Resume_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
@@ -171,6 +192,11 @@ namespace CvAnalyzer.Persistence.Data.Migrations
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resume_ApplicationUserId",
+                table: "Resume",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -211,6 +237,9 @@ namespace CvAnalyzer.Persistence.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Resume");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
